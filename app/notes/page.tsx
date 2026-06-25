@@ -1,4 +1,6 @@
 import DashboardLayout from "@/components/layout/dashboard-layout";
+import NoteForm from "@/components/notes/note-form";
+import NoteList from "@/components/notes/note-list";
 
 export default function NotesPage() {
   return (
@@ -7,27 +9,9 @@ export default function NotesPage() {
         Notes
       </h1>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {[
-          "DBMS Notes",
-          "DSA Notes",
-          "OS Notes",
-          "CN Notes",
-        ].map((note) => (
-          <div
-            key={note}
-            className="glass rounded-[28px] p-6 shadow-xl"
-          >
-            <h3 className="font-semibold text-lg">
-              {note}
-            </h3>
+      <NoteForm />
 
-            <button className="mt-4 rounded-xl bg-emerald-500 px-4 py-2 text-white">
-              Download
-            </button>
-          </div>
-        ))}
-      </div>
+      <NoteList />
     </DashboardLayout>
   );
 }

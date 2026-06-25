@@ -7,10 +7,12 @@ import {
   Cell,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
+import { PieChart as PieChartIcon } from "lucide-react";
 
 const COLORS = [
-  "#10b981",
+  "#06b6d4",
   "#3b82f6",
   "#8b5cf6",
 ];
@@ -47,26 +49,54 @@ export default function TaskStatusChart() {
   }
 
   return (
-    <div className="glass rounded-[30px] p-6 shadow-xl">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-2xl font-bold">
-          Task Analytics
-        </h2>
+    <div className="rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-[#0f172a]/90 via-[#111827]/90 to-[#1e293b]/90 p-6 shadow-xl backdrop-blur-xl">
 
-        <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm text-emerald-600">
-          Live
+      {/* Header */}
+
+      <div className="mb-6 flex items-center justify-between">
+
+        <div className="flex items-center gap-3">
+
+          <div className="rounded-2xl bg-cyan-500/10 p-3">
+            <PieChartIcon
+              size={22}
+              className="text-cyan-400"
+            />
+          </div>
+
+          <div>
+
+            <h2 className="text-xl font-bold text-white">
+              Task Analytics
+            </h2>
+
+            <p className="text-sm text-slate-400">
+              Live task distribution
+            </p>
+
+          </div>
+
+        </div>
+
+        <span className="rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs font-semibold text-cyan-300">
+          ● LIVE
         </span>
+
       </div>
 
-      <div className="h-[320px]">
+      {/* Chart */}
+
+      <div className="h-[260px]">
+
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
+
             <Pie
               data={data}
               dataKey="value"
-              outerRadius={110}
-              innerRadius={60}
-              paddingAngle={4}
+              outerRadius={90}
+              innerRadius={55}
+              paddingAngle={5}
             >
               {data.map((_, index) => (
                 <Cell
@@ -76,10 +106,27 @@ export default function TaskStatusChart() {
               ))}
             </Pie>
 
-            <Tooltip />
+            <Tooltip
+              contentStyle={{
+                background: "#111827",
+                border: "1px solid #22d3ee30",
+                borderRadius: "14px",
+                color: "#fff",
+              }}
+            />
+
+            <Legend
+              wrapperStyle={{
+                color: "#cbd5e1",
+                fontSize: 13,
+              }}
+            />
+
           </PieChart>
         </ResponsiveContainer>
+
       </div>
+
     </div>
   );
 }

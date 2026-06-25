@@ -5,6 +5,9 @@ import {
   CheckCircle,
   PlayCircle,
   Trash2,
+  ClipboardList,
+  Loader2,
+  Trophy,
 } from "lucide-react";
 
 type Task = {
@@ -36,9 +39,7 @@ export default function KanbanBoard() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        status,
-      }),
+      body: JSON.stringify({ status }),
     });
 
     fetchTasks();
@@ -56,117 +57,130 @@ export default function KanbanBoard() {
     {
       title: "To Do",
       status: "TODO",
+      icon: ClipboardList,
+      color: "cyan",
     },
     {
       title: "In Progress",
       status: "IN_PROGRESS",
+      icon: Loader2,
+      color: "orange",
     },
     {
       title: "Completed",
       status: "COMPLETED",
+      icon: Trophy,
+      color: "emerald",
     },
   ];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-3">
-      {columns.map((column) => (
-        <div
-          key={column.title}
-          className="glass rounded-[28px] p-5 shadow-xl"
-        >
-          <h2 className="mb-5 text-xl font-bold">
-            {column.title}
-          </h2>
+    <div className="grid gap-4 lg:grid-cols-3">
+      {columns.map((column) => {
+        const Icon = column.icon;
 
-          <div className="space-y-4">
-            {tasks
-              .filter(
-                (task) =>
-                  task.status === column.status
-              )
-              .map((task) => (
+        const filtered = tasks.filter(
+          (task) => task.status === column.status
+        );
+
+        return (
+          <div
+            key={column.title}
+            className="rounded-2xl border border-white/10 bg-[#0F172A] p-4 shadow-lg"
+          >
+            {/* Header */}
+            <div className="mb-4 flex items-center justify-between">
+
+              <div className="flex items-center gap-2">
+
+                <div
+                  className={`rounded-xl p-2 ${
+                    column.color === "cyan"
+                      ? "bg-cyan-500/15 text-cyan-400"
+                      : column.color === "orange"
+                      ? "bg-orange-500/15 text-orange-400"
+                      : "bg-emerald-500/15 text-emerald-400"
+                  }`}
+                >
+                  <Icon size={18} />
+                </div>
+
+                <div>
+                  <h2 className="font-semibold text-white">
+                    {column.title}
+                  </h2>
+
+                  <p className="text-xs text-slate-400">
+                    {filtered.length} Tasks
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div className="space-y-3">
+
+              {filtered.length === 0 && (
+                <div className="rounded-xl border border-dashed border-white/10 py-6 text-center text-sm text-slate-500">
+                  No Tasks
+                </div>
+              )}
+
+              {filtered.map((task) => (
                 <div
                   key={task.id}
-                  className="
-                    rounded-2xl
-                    border
-                    bg-white/60
-                    p-4
-                    shadow-sm
-                    transition-all
-                    duration-300
-                    hover:-translate-y-1
-                  "
+                  className="rounded-xl border border-white/10 bg-white/5 p-4 transition hover:border-cyan-400/40 hover:bg-white/10"
                 >
-                  <h3 className="font-semibold">
+                  <h3 className="font-medium text-white">
                     {task.title}
                   </h3>
 
                   {task.description && (
-                    <p className="mt-2 text-sm text-slate-500">
+                    <p className="mt-1 line-clamp-2 text-xs text-slate-400">
                       {task.description}
                     </p>
                   )}
 
-                  <div className="mt-4 flex gap-2">
+                  <div className="mt-3 flex gap-2">
+
                     {task.status === "TODO" && (
                       <button
                         onClick={() =>
-                          updateTask(
-                            task.id,
-                            "IN_PROGRESS"
-                          )
+                          updateTask(task.id, "IN_PROGRESS")
                         }
-                        className="
-                          rounded-lg
-                          bg-blue-500
-                          p-2
-                          text-white
-                        "
+                        className="rounded-lg bg-blue-500 p-2 text-white hover:bg-blue-600"
                       >
-                        <PlayCircle size={18} />
+                        <PlayCircle size={16} />
                       </button>
                     )}
 
-                    {task.status ===
-                      "IN_PROGRESS" && (
+                    {task.status === "IN_PROGRESS" && (
                       <button
                         onClick={() =>
-                          updateTask(
-                            task.id,
-                            "COMPLETED"
-                          )
+                          updateTask(task.id, "COMPLETED")
                         }
-                        className="
-                          rounded-lg
-                          bg-green-500
-                          p-2
-                          text-white
-                        "
+                        className="rounded-lg bg-emerald-500 p-2 text-white hover:bg-emerald-600"
                       >
-                        <CheckCircle size={18} />
+                        <CheckCircle size={16} />
                       </button>
                     )}
 
                     <button
-                      onClick={() =>
-                        deleteTask(task.id)
-                      }
-                      className="
-                        rounded-lg
-                        bg-red-500
-                        p-2
-                        text-white
-                      "
+                      onClick={() => deleteTask(task.id)}
+                      className="rounded-lg bg-red-500 p-2 text-white hover:bg-red-600"
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
+
                   </div>
                 </div>
               ))}
+
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
