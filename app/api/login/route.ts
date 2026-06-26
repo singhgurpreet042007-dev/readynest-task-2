@@ -6,20 +6,17 @@ import { generateToken } from "@/lib/auth";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
     const { email, password } = body;
 
     if (!email || !password) {
       return NextResponse.json(
-        { message: "Email and password are required" },
+        { message: "Email and password required" },
         { status: 400 }
       );
     }
 
     const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
     });
 
     if (!user) {
@@ -29,10 +26,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return NextResponse.json(
@@ -49,24 +43,20 @@ export async function POST(req: Request) {
         id: user.id,
         fullName: user.fullName,
         email: user.email,
-        role: user.role,
+        role: user.role, // ✅ IMPORTANT
       },
     });
 
     response.cookies.set("token", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
     });
 
     return response;
   } catch (error) {
-    console.log(error);
-
     return NextResponse.json(
-      { message: "Something went wrong" },
+      { message: "Server error" },
       { status: 500 }
     );
   }

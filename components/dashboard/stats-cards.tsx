@@ -34,37 +34,46 @@ const stats = [
 
 export default function StatsCards() {
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+
       {stats.map((item) => {
         const Icon = item.icon;
 
         return (
           <div
             key={item.title}
-            className="glass rounded-[28px] p-6 shadow-xl"
+            className="rounded-2xl border border-white/10 bg-[#0f172a]/80 p-4 backdrop-blur-xl transition hover:border-cyan-400/20"
           >
+
+            {/* Top row */}
             <div className="flex items-center justify-between">
+
               <div
-                className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r ${item.color} text-white`}
+                className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r ${item.color} text-white`}
               >
-                <Icon size={20} />
+                <Icon size={18} />
               </div>
 
-              <span className="text-xs text-slate-400">
+              <span className="text-[10px] text-slate-500">
                 LIVE
               </span>
+
             </div>
 
-            <h2 className="mt-6 text-4xl font-bold">
+            {/* Value */}
+            <h2 className="mt-3 text-2xl font-bold text-white">
               {item.value}
             </h2>
 
-            <p className="mt-2 text-slate-500">
+            {/* Title */}
+            <p className="text-xs text-slate-400">
               {item.title}
             </p>
+
           </div>
         );
       })}
+
     </div>
   );
 }

@@ -2,6 +2,8 @@ import DashboardLayout from "@/components/layout/dashboard-layout";
 
 import ProfileHeader from "@/components/profile/profile-header";
 import ProfileInfo from "@/components/profile/profile-info";
+import EditProfile from "@/components/profile/edit-profile";
+import ChangePassword from "@/components/profile/change-password";
 
 import { UserCircle2 } from "lucide-react";
 
@@ -26,6 +28,10 @@ export default function ProfilePage() {
       <div className="space-y-6">
         <ProfileHeader />
         <ProfileInfo />
+        <div className="grid gap-5 md:grid-cols-2">
+  <EditProfile />
+  <ChangePassword />
+</div>
       </div>
     </DashboardLayout>
   );

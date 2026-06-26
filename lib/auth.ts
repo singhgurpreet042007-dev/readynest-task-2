@@ -1,30 +1,14 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET =
-  process.env.JWT_SECRET || "fallback-secret";
+const SECRET = process.env.JWT_SECRET || "secret_key";
 
-export function generateToken(
-  userId: string
-) {
-  return jwt.sign(
-    { userId },
-    JWT_SECRET,
-    {
-      expiresIn: "7d",
-    }
-  );
+export function generateToken(userId: string) {
+  return jwt.sign({ userId }, SECRET, { expiresIn: "7d" });
 }
 
-export function verifyToken(
-  token: string
-) {
+export function verifyToken(token: string) {
   try {
-    return jwt.verify(
-      token,
-      JWT_SECRET
-    ) as {
-      userId: string;
-    };
+    return jwt.verify(token, SECRET) as { userId: string };
   } catch {
     return null;
   }

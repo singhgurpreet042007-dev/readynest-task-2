@@ -23,26 +23,20 @@ export default function NoticeList() {
   }
 
   async function deleteNotice(id: string) {
-    await fetch(`/api/notices/${id}`, {
-      method: "DELETE",
-    });
-
+    await fetch(`/api/notices/${id}`, { method: "DELETE" });
     fetchNotices();
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-3">
 
       {notices.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-white/10 bg-[#0F172A] p-8 text-center">
-          <BellRing
-            className="mx-auto mb-3 text-slate-500"
-            size={36}
-          />
-          <h3 className="text-lg font-semibold text-white">
+        <div className="rounded-xl border border-dashed border-white/10 bg-[#0F172A] p-6 text-center">
+          <BellRing className="mx-auto mb-2 text-slate-500" size={30} />
+          <h3 className="text-base font-semibold text-white">
             No Notices Found
           </h3>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-1 text-xs text-slate-400">
             Create your first notice to get started.
           </p>
         </div>
@@ -52,37 +46,32 @@ export default function NoticeList() {
         <div
           key={notice.id}
           className="
-            rounded-2xl
+            rounded-xl
             border
             border-violet-500/20
             bg-[#0F172A]
-            p-5
-            shadow-lg
+            p-4
+            shadow-md
             transition-all
-            duration-300
-            hover:-translate-y-1
+            hover:-translate-y-0.5
             hover:border-violet-500/40
-            hover:shadow-violet-500/20
           "
         >
 
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between gap-3">
 
-            <div className="flex gap-4">
+            <div className="flex gap-3">
 
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-600 shadow-lg">
-                <BellRing
-                  size={20}
-                  className="text-white"
-                />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-r from-violet-500 to-fuchsia-600">
+                <BellRing size={18} className="text-white" />
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-base font-semibold text-white">
                   {notice.title}
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-slate-400">
+                <p className="mt-1 text-xs leading-5 text-slate-400">
                   {notice.description}
                 </p>
               </div>
@@ -92,16 +81,15 @@ export default function NoticeList() {
             <button
               onClick={() => deleteNotice(notice.id)}
               className="
-                rounded-xl
+                rounded-lg
                 bg-red-500/15
-                p-3
+                p-2.5
                 text-red-400
-                transition-all
                 hover:bg-red-500
                 hover:text-white
               "
             >
-              <Trash2 size={18} />
+              <Trash2 size={16} />
             </button>
 
           </div>

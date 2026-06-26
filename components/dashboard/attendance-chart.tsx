@@ -19,17 +19,34 @@ const data = [
 
 export default function AttendanceChart() {
   return (
-    <div className="glass rounded-[28px] p-6 shadow-xl">
-      <h2 className="text-xl font-semibold mb-6">
+    <div className="rounded-2xl border border-white/10 bg-[#0f172a]/80 p-4 backdrop-blur-xl">
+
+      {/* Header */}
+      <h2 className="mb-3 text-base font-semibold text-white">
         Attendance Overview
       </h2>
 
-      <div className="h-72">
+      {/* Chart */}
+      <div className="h-56">
+
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
-            <XAxis dataKey="day" />
 
-            <Tooltip />
+            <XAxis
+              dataKey="day"
+              tick={{ fontSize: 10, fill: "#94a3b8" }}
+              axisLine={false}
+              tickLine={false}
+            />
+
+            <Tooltip
+              contentStyle={{
+                background: "#0f172a",
+                border: "1px solid rgba(34,211,238,0.2)",
+                borderRadius: "10px",
+                fontSize: "12px",
+              }}
+            />
 
             <Area
               type="monotone"
@@ -37,9 +54,12 @@ export default function AttendanceChart() {
               stroke="#10b981"
               fill="#10b981"
               fillOpacity={0.2}
+              strokeWidth={2}
             />
+
           </AreaChart>
         </ResponsiveContainer>
+
       </div>
     </div>
   );

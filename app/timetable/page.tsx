@@ -9,22 +9,20 @@ export default function TimetablePage() {
 
       {/* Header */}
 
-      <div className="mb-6">
+      <div className="mb-5">
+  <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1.5 text-xs text-cyan-300">
+    <CalendarDays size={14} />
+    Weekly Schedule
+  </div>
 
-        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-sm text-cyan-300">
-          <CalendarDays size={16} />
-          Weekly Schedule
-        </div>
+  <h1 className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-3xl font-bold text-transparent">
+    Timetable
+  </h1>
 
-        <h1 className="bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400 bg-clip-text text-4xl font-bold text-transparent">
-          Timetable
-        </h1>
-
-        <p className="mt-2 text-slate-400">
-          Organize and manage your daily class schedule.
-        </p>
-
-      </div>
+  <p className="mt-1 text-sm text-slate-400">
+    Organize your weekly classes.
+  </p>
+</div>
 
       <TimetableForm />
 

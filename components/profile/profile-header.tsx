@@ -1,59 +1,66 @@
 "use client";
 
-import {
-  GraduationCap,
-  ShieldCheck,
-  UserCircle2,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { GraduationCap, ShieldCheck } from "lucide-react";
+
+type User = {
+  fullName: string;
+  email: string;
+  role: string;
+};
 
 export default function ProfileHeader() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+  async function fetchProfile() {
+    try {
+      const res = await fetch("/api/profile");
+      const data = await res.json();
+      setUser(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-violet-500/20 bg-[#0F172A] p-6 shadow-lg">
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0F172A] p-5 shadow-lg">
 
-      {/* Background Glow */}
-
-      <div className="absolute -right-20 -top-20 h-44 w-44 rounded-full bg-violet-500/20 blur-3xl" />
-      <div className="absolute -left-16 bottom-0 h-36 w-36 rounded-full bg-cyan-500/20 blur-3xl" />
+      <div className="absolute -top-16 -right-16 h-48 w-48 rounded-full bg-violet-600/20 blur-3xl" />
+      <div className="absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-cyan-500/20 blur-3xl" />
 
       <div className="relative flex flex-col items-center">
 
-        {/* Avatar */}
-
-        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-600 shadow-[0_0_30px_rgba(59,130,246,.45)]">
-          <UserCircle2
-            size={48}
-            className="text-white"
-          />
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 via-blue-500 to-violet-600 text-2xl font-bold text-white shadow-xl">
+          {user?.fullName?.charAt(0).toUpperCase()}
         </div>
 
-        {/* User */}
-
-        <h1 className="mt-4 text-3xl font-bold text-white">
-          Student
+        <h1 className="mt-3 text-2xl font-bold text-white">
+          {user?.fullName}
         </h1>
 
-        <p className="mt-1 text-slate-400">
-          Smart Campus User
+        <p className="mt-1 text-sm text-slate-400">
+          {user?.email}
         </p>
 
-        {/* Badges */}
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
 
-        <div className="mt-5 flex flex-wrap justify-center gap-3">
-
-          <div className="flex items-center gap-2 rounded-full bg-cyan-500/10 px-4 py-2 text-sm text-cyan-300">
-            <GraduationCap size={16} />
-            Student Portal
+          <div className="flex items-center gap-1 rounded-full bg-cyan-500/10 px-3 py-1 text-xs text-cyan-300">
+            <GraduationCap size={14} />
+            {user?.role}
           </div>
 
-          <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2 text-sm text-emerald-300">
-            <ShieldCheck size={16} />
-            Verified Account
+          <div className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-3 py-1 text-xs text-emerald-300">
+            <ShieldCheck size={14} />
+            Verified
           </div>
 
         </div>
 
       </div>
-
     </div>
   );
 }

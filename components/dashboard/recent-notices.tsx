@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  BellRing,
-  Megaphone,
-  ArrowRight,
-  CalendarDays,
-} from "lucide-react";
+import { BellRing, Megaphone, ArrowRight, CalendarDays } from "lucide-react";
 
 type Notice = {
   id: string;
@@ -19,88 +14,74 @@ export default function RecentNotices() {
   useEffect(() => {
     fetch("/api/notices")
       .then((res) => res.json())
-      .then((data) => setNotices(data.slice(0, 4)));
+      .then((data) => setNotices(Array.isArray(data) ? data.slice(0, 4) : []))
+      .catch(() => setNotices([]));
   }, []);
 
   return (
-    <div className="rounded-3xl border border-violet-500/20 bg-gradient-to-br from-[#0f172a]/90 via-[#111827]/90 to-[#1e1b4b]/90 p-6 shadow-xl backdrop-blur-xl">
+    <div className="rounded-2xl border border-violet-500/15 bg-[#0f172a]/80 p-4 backdrop-blur-xl">
 
       {/* Header */}
-      <div className="mb-5 flex items-center justify-between">
+      <div className="mb-3 flex items-center justify-between">
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
 
-          <div className="rounded-2xl bg-violet-500/10 p-3">
-            <Megaphone
-              className="text-violet-400"
-              size={22}
-            />
+          <div className="rounded-lg bg-violet-500/10 p-2">
+            <Megaphone className="text-violet-400" size={16} />
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-base font-semibold text-white">
               Recent Notices
             </h2>
-
-            <p className="text-sm text-slate-400">
-              Latest campus announcements
+            <p className="text-[11px] text-slate-400">
+              Latest updates
             </p>
           </div>
 
         </div>
 
-        <button className="rounded-xl border border-violet-500/20 bg-violet-500/10 px-3 py-2 text-xs text-violet-300 transition hover:bg-violet-500/20">
-          View All
+        <button className="rounded-md border border-violet-500/20 bg-violet-500/10 px-2 py-1 text-[10px] text-violet-300">
+          All
         </button>
 
       </div>
 
-      {/* Empty State */}
-
+      {/* Empty */}
       {notices.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/10 py-10 text-center text-slate-400">
-          No notices available.
+        <div className="rounded-xl border border-dashed border-white/10 py-6 text-center text-[11px] text-slate-500">
+          No notices
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-2">
 
           {notices.map((notice) => (
             <div
               key={notice.id}
-              className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-violet-400/30 hover:bg-violet-500/5"
+              className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-3 py-2 transition hover:border-violet-400/20"
             >
 
-              <div className="flex items-center gap-4">
+              {/* Left */}
+              <div className="flex items-center gap-3">
 
-                <div className="rounded-xl bg-violet-500/15 p-3">
-                  <BellRing
-                    size={20}
-                    className="text-violet-400"
-                  />
+                <div className="rounded-lg bg-violet-500/10 p-2">
+                  <BellRing size={14} className="text-violet-400" />
                 </div>
 
-                <div>
-
-                  <h3 className="font-semibold text-white">
+                <div className="min-w-0">
+                  <h3 className="truncate text-sm font-medium text-white">
                     {notice.title}
                   </h3>
 
-                  <div className="mt-1 flex items-center gap-2 text-xs text-slate-400">
-
-                    <CalendarDays size={13} />
-
-                    <span>Campus Notice</span>
-
+                  <div className="flex items-center gap-1 text-[10px] text-slate-400">
+                    <CalendarDays size={10} />
+                    <span>Notice</span>
                   </div>
-
                 </div>
 
               </div>
 
-              <ArrowRight
-                size={18}
-                className="text-slate-500 transition group-hover:translate-x-1 group-hover:text-violet-400"
-              />
+              <ArrowRight size={14} className="text-slate-500" />
 
             </div>
           ))}

@@ -37,7 +37,7 @@ export default function TimetableGrid() {
 
           <div className="rounded-xl bg-cyan-500/15 p-3">
             <CalendarDays
-              size={22}
+              size={18}
               className="text-cyan-400"
             />
           </div>

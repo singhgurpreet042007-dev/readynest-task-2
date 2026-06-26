@@ -38,10 +38,10 @@ export default function TimetableList() {
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
 
       {data.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-white/10 bg-[#0F172A] py-10 text-center text-slate-500">
+        <div className="rounded-xl border border-dashed border-white/10 bg-[#0F172A] py-10 text-center text-slate-500">
           No Timetable Found
         </div>
       )}
@@ -49,7 +49,7 @@ export default function TimetableList() {
       {data.map((item) => (
         <div
           key={item.id}
-          className="rounded-2xl border border-white/10 bg-[#0F172A] p-5 shadow-lg transition hover:border-cyan-400/30 hover:-translate-y-1"
+          className="rounded-xl border border-white/8 bg-[#0F172A] p-4 shadow-lg transition hover:border-cyan-400/30 hover:-translate-y-1"
         >
           {/* Header */}
 
@@ -57,16 +57,16 @@ export default function TimetableList() {
 
             <div className="flex items-center gap-3">
 
-              <div className="rounded-xl bg-cyan-500/15 p-2">
+              <div className="rounded-xl bg-cyan-500/15 p-1.5">
                 <BookOpen
-                  size={20}
+                  size={17}
                   className="text-cyan-400"
                 />
               </div>
 
               <div>
 
-                <h3 className="font-semibold text-white">
+                <h3 className="ftext-base font-semibold text-white">
                   {item.subject}
                 </h3>
 

@@ -19,18 +19,24 @@ enum TaskStatus {
 }
 
 model User {
-  id       String @id @default(cuid())
-  fullName String
-  email    String @unique
-  password String
-  role     Role   @default(STUDENT)
+id       String @id @default(cuid())
+fullName String
+email    String @unique
+password String
+role     Role   @default(STUDENT)
 
-  tasks      Task[]
-  attendance Attendance[]
+phone      String?
+department String?
+semester   String?
+rollNumber String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+tasks      Task[]
+attendance Attendance[]
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
 }
+
 
 model Task {
   id          String     @id @default(cuid())
@@ -38,8 +44,11 @@ model Task {
   description String?
   status      TaskStatus @default(TODO)
 
+  dueDate     DateTime?
+  reminderAt  DateTime?
+
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
 }
@@ -84,3 +93,4 @@ model Timetable {
 
   createdAt DateTime @default(now())
 }
+

@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  CheckCircle2,
-  Clock3,
-  ArrowRight,
-  ListTodo,
-} from "lucide-react";
+import { CheckCircle2, Clock3, ArrowRight, ListTodo } from "lucide-react";
 
 type Task = {
   id: string;
@@ -24,86 +19,79 @@ export default function RecentTasks() {
   }, []);
 
   return (
-    <div className="rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-[#0f172a]/90 via-[#111827]/90 to-[#1e293b]/90 p-6 shadow-xl backdrop-blur-xl">
+    <div className="rounded-2xl border border-cyan-500/15 bg-[#0f172a]/80 p-4 backdrop-blur-xl">
 
-      {/* Header */}
-      <div className="mb-5 flex items-center justify-between">
+      {/* Header (compact) */}
+      <div className="mb-3 flex items-center justify-between">
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
 
-          <div className="rounded-2xl bg-cyan-500/10 p-3">
-            <ListTodo className="text-cyan-400" size={22} />
+          <div className="rounded-xl bg-cyan-500/10 p-2">
+            <ListTodo className="text-cyan-400" size={18} />
           </div>
 
           <div>
-            <h2 className="text-xl font-bold text-white">
+            <h2 className="text-base font-semibold text-white">
               Recent Tasks
             </h2>
-
-            <p className="text-sm text-slate-400">
-              Latest assigned work
+            <p className="text-[11px] text-slate-400">
+              Latest work
             </p>
           </div>
 
         </div>
 
-        <button className="rounded-xl border border-cyan-500/20 bg-cyan-500/10 px-3 py-2 text-xs text-cyan-300 transition hover:bg-cyan-500/20">
-          View All
+        <button className="rounded-lg border border-cyan-500/20 bg-cyan-500/10 px-2 py-1 text-[11px] text-cyan-300">
+          All
         </button>
 
       </div>
 
-      {/* Empty State */}
-
+      {/* Empty */}
       {tasks.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/10 py-10 text-center text-slate-400">
-          No recent tasks found.
+        <div className="rounded-xl border border-dashed border-white/10 py-6 text-center text-xs text-slate-500">
+          No tasks
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-2">
+
           {tasks.map((task) => (
             <div
               key={task.id}
-              className="group flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-cyan-500/5"
+              className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-3 py-2 transition hover:border-cyan-400/20"
             >
-              <div className="flex items-center gap-4">
 
-                <div className="rounded-xl bg-emerald-500/15 p-3">
-                  <CheckCircle2
-                    size={20}
-                    className="text-emerald-400"
-                  />
+              {/* Left */}
+              <div className="flex items-center gap-3">
+
+                <div className="rounded-lg bg-emerald-500/10 p-2">
+                  <CheckCircle2 size={16} className="text-emerald-400" />
                 </div>
 
-                <div>
-
-                  <h3 className="font-semibold text-white">
+                <div className="min-w-0">
+                  <h3 className="truncate text-sm font-medium text-white">
                     {task.title}
                   </h3>
 
-                  <div className="mt-1 flex items-center gap-2">
-
-                    <Clock3
-                      size={14}
-                      className="text-slate-500"
-                    />
-
-                    <span className="rounded-full bg-cyan-500/10 px-2 py-1 text-xs font-medium text-cyan-300">
+                  <div className="flex items-center gap-2 text-[10px] text-slate-400">
+                    <Clock3 size={12} />
+                    <span className="rounded-full bg-cyan-500/10 px-2 py-[2px] text-[10px] text-cyan-300">
                       {task.status}
                     </span>
-
                   </div>
-
                 </div>
 
               </div>
 
+              {/* Arrow */}
               <ArrowRight
-                size={18}
-                className="text-slate-500 transition group-hover:translate-x-1 group-hover:text-cyan-400"
+                size={14}
+                className="text-slate-500"
               />
+
             </div>
           ))}
+
         </div>
       )}
 

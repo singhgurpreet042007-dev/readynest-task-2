@@ -7,238 +7,131 @@ import { useRouter } from "next/navigation";
 export default function SignupPage() {
   const router = useRouter();
 
-  const [fullName, setFullName] =
-    useState("");
-
-  const [email, setEmail] =
-    useState("");
-
-  const [password, setPassword] =
-    useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState<"STUDENT" | "ADMIN">("STUDENT");
 
   async function handleSignup() {
     const res = await fetch("/api/signup", {
       method: "POST",
-      headers: {
-        "Content-Type":
-          "application/json",
-      },
-      body: JSON.stringify({
-        fullName,
-        email,
-        password,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fullName, email, password, role }),
     });
 
     const data = await res.json();
 
     if (res.ok) {
-      alert(
-        "Account Created Successfully 🚀"
-      );
-
+      alert("Account Created 🚀");
       router.push("/login");
       return;
     }
 
-    alert(
-      data.message ||
-        "Signup Failed"
-    );
+    alert(data.message || "Signup Failed");
   }
 
   return (
-    <div className="relative flex min-h-screen overflow-hidden bg-[#020617]">
+    <div className="relative min-h-screen flex overflow-hidden bg-black text-white">
 
-      {/* Purple Glow */}
+      {/* BACKGROUNDS */}
+      <div className="absolute -top-40 -left-40 h-[500px] w-[500px] bg-red-600/20 blur-[160px] rounded-full" />
+      <div className="absolute bottom-0 right-0 h-[500px] w-[500px] bg-orange-500/20 blur-[160px] rounded-full" />
 
-      <div className="absolute left-0 top-0 h-[450px] w-[450px] rounded-full bg-violet-600/20 blur-[160px]" />
+      {/* LEFT SIDE */}
+      <div className="hidden lg:flex flex-1 flex-col justify-center px-24 z-10">
 
-      {/* Cyan Glow */}
+        <h1 className="text-6xl font-extrabold">
+          Join{" "}
+          <span className="bg-gradient-to-r from-red-500 to-orange-400 text-transparent bg-clip-text">
+            Smart Campus
+          </span>
+        </h1>
 
-      <div className="absolute right-0 bottom-0 h-[450px] w-[450px] rounded-full bg-cyan-500/20 blur-[160px]" />
-
-      {/* Left Section */}
-
-      <div className="hidden lg:flex flex-1 flex-col justify-center px-20 text-white">
-
-        <div className="mb-8 flex items-center gap-4">
-
-          <div
-            className="
-              flex h-16 w-16
-              items-center justify-center
-              rounded-3xl
-              bg-gradient-to-r
-              from-violet-500
-              to-cyan-500
-              text-2xl
-              font-bold
-            "
-          >
-            SC
-          </div>
-
-          <div>
-            <h1 className="text-5xl font-bold">
-              Smart Campus
-            </h1>
-
-            <p className="mt-2 text-slate-400">
-              Future of Student Productivity
-            </p>
-          </div>
-        </div>
-
-        <h2 className="max-w-xl text-5xl font-bold leading-tight">
-          Create Your Smart Campus Account 🚀
-        </h2>
-
-        <p className="mt-6 max-w-xl text-lg text-slate-400">
-          Join thousands of students
-          managing attendance, notes,
-          tasks and schedules from
-          one beautiful dashboard.
+        <p className="mt-6 text-slate-400 max-w-xl">
+          Create account as Student or Admin and get access to your dashboard system.
         </p>
 
-        <div className="mt-12 space-y-4">
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-            📚 Store & Organize Notes
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-            📊 Track Attendance Easily
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-            ✅ Manage Daily Tasks
-          </div>
-
+        <div className="mt-10 space-y-3 text-sm text-slate-300">
+          <p>⚡ Fast Dashboard System</p>
+          <p>📊 Attendance Tracking</p>
+          <p>📝 Notes Management</p>
+          <p>🔔 Notice System</p>
         </div>
       </div>
 
-      {/* Signup Card */}
+      {/* RIGHT SIDE */}
+      <div className="flex flex-1 items-center justify-center p-6 z-10">
 
-      <div className="flex flex-1 items-center justify-center p-6">
+        <div className="w-full max-w-md rounded-3xl border border-red-500/20 bg-black/60 p-8 backdrop-blur-2xl">
 
-        <div
-          className="
-            w-full
-            max-w-md
-            rounded-[32px]
-            border
-            border-white/10
-            bg-white/10
-            p-8
-            text-white
-            shadow-2xl
-            backdrop-blur-2xl
-          "
-        >
-          <h2 className="text-4xl font-bold">
-            Join Us ✨
-          </h2>
-
-          <p className="mt-2 text-slate-300">
-            Create your account
-          </p>
+          <h2 className="text-4xl font-bold">Create Account</h2>
 
           <div className="mt-8 space-y-4">
 
             <input
               placeholder="Full Name"
               value={fullName}
-              onChange={(e) =>
-                setFullName(
-                  e.target.value
-                )
-              }
-              className="
-                w-full
-                rounded-2xl
-                border
-                border-white/10
-                bg-white/10
-                p-4
-                outline-none
-              "
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full p-3 rounded-xl bg-white/5 border border-white/10"
             />
 
             <input
               placeholder="Email"
               value={email}
-              onChange={(e) =>
-                setEmail(
-                  e.target.value
-                )
-              }
-              className="
-                w-full
-                rounded-2xl
-                border
-                border-white/10
-                bg-white/10
-                p-4
-                outline-none
-              "
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full p-3 rounded-xl bg-white/5 border border-white/10"
             />
 
             <input
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) =>
-                setPassword(
-                  e.target.value
-                )
-              }
-              className="
-                w-full
-                rounded-2xl
-                border
-                border-white/10
-                bg-white/10
-                p-4
-                outline-none
-              "
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-3 rounded-xl bg-white/5 border border-white/10"
             />
+
+            {/* ROLE */}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setRole("STUDENT")}
+                className={`py-2 rounded-xl border ${
+                  role === "STUDENT"
+                    ? "bg-red-600"
+                    : "bg-white/5"
+                }`}
+              >
+                Student
+              </button>
+
+              <button
+                onClick={() => setRole("ADMIN")}
+                className={`py-2 rounded-xl border ${
+                  role === "ADMIN"
+                    ? "bg-orange-500"
+                    : "bg-white/5"
+                }`}
+              >
+                Admin
+              </button>
+            </div>
 
             <button
               onClick={handleSignup}
-              className="
-                w-full
-                rounded-2xl
-                bg-gradient-to-r
-                from-violet-500
-                via-fuchsia-500
-                to-cyan-500
-                p-4
-                font-semibold
-                transition-all
-                hover:scale-[1.02]
-              "
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-orange-500 font-semibold"
             >
-              Create Account
+              CREATE ACCOUNT
             </button>
 
-            <p className="text-center text-slate-300">
-              Already have an account?
-              {" "}
-              <Link
-                href="/login"
-                className="
-                  font-semibold
-                  text-cyan-400
-                "
-              >
-                Login
-              </Link>
-            </p>
-
           </div>
-        </div>
 
+          <p className="mt-6 text-center text-sm text-slate-400">
+            Already have account?{" "}
+            <Link href="/login" className="text-red-400">
+              Login
+            </Link>
+          </p>
+
+        </div>
       </div>
     </div>
   );

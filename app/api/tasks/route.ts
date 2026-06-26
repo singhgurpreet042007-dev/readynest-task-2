@@ -7,24 +7,16 @@ import { verifyToken } from "@/lib/auth";
 export async function GET() {
   try {
     const cookieStore = await cookies();
-
-    const token =
-      cookieStore.get("token")?.value;
+    const token = cookieStore.get("token")?.value;
 
     if (!token) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const payload = verifyToken(token);
 
     if (!payload) {
-      return NextResponse.json(
-        { message: "Invalid token" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Invalid Token" }, { status: 401 });
     }
 
     const tasks = await prisma.task.findMany({
@@ -50,34 +42,44 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const cookieStore = await cookies();
-
-    const token =
-      cookieStore.get("token")?.value;
+    const token = cookieStore.get("token")?.value;
 
     if (!token) {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const payload = verifyToken(token);
 
     if (!payload) {
-      return NextResponse.json(
-        { message: "Invalid token" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Invalid Token" }, { status: 401 });
     }
 
     const body = await req.json();
 
-    const { title, description } = body;
+    const { title, description, dueDate, dueTime } = body;
+
+    if (!title) {
+      return NextResponse.json(
+        { message: "Title is required" },
+        { status: 400 }
+      );
+    }
+
+    
+    const taskDueDate = dueDate ? new Date(dueDate) : null;
+
+    
+    const reminderAt =
+      dueDate && dueTime
+        ? new Date(`${dueDate}T${dueTime}:00`)
+        : null;
 
     const task = await prisma.task.create({
       data: {
         title,
         description,
+        dueDate: taskDueDate,
+        reminderAt,
         userId: payload.userId,
       },
     });
