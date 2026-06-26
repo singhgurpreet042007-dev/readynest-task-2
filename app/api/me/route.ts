@@ -1,20 +1,51 @@
-"use client";
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { prisma } from "@/lib/prisma";
+import { verifyToken } from "@/lib/auth";
 
-export default function AdminLayout({ children }: any) {
-  const router = useRouter();
+export async function GET() {
+  try {
+    const cookieStore = await cookies();
 
-  useEffect(() => {
-    fetch("/api/me")
-      .then((res) => res.json())
-      .then((user) => {
-        if (user.role !== "ADMIN") {
-          router.push("/dashboard");
-        }
-      });
-  }, []);
+    const token =
+      cookieStore.get("token")?.value;
 
-  return children;
+    if (!token) {
+      return NextResponse.json(
+        { message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    const payload = verifyToken(token);
+
+    if (!payload) {
+      return NextResponse.json(
+        { message: "Invalid token" },
+        { status: 401 }
+      );
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: payload.userId,
+      },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    return NextResponse.json(user);
+  } catch (error) {
+    console.log(error);
+
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 500 }
+    );
+  }
 }
