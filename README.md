@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 Smart Campus Utility Platform
 
-## Getting Started
+A modern full-stack Campus Utility Platform built using **Next.js, TypeScript, Prisma, PostgreSQL, JWT Authentication, and Tailwind CSS**. The system provides secure role-based access for both **Students** and **Admins**, allowing users to manage their personal data while maintaining proper access control.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### 👨‍🎓 Student
+- Manage personal tasks
+- View attendance
+- View notices
+- View timetable
+- Personal dashboard
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 👨‍💼 Admin
+- Manage personal tasks
+- View all users' tasks
+- Manage notices
+- Manage timetable
+- System administration dashboard
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔒 Role-Based Access Control
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Secure JWT Authentication
+- Protected API Routes
+- Student can access only their own data.
+- Admin has system-wide management privileges while also maintaining personal data.
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- Prisma ORM
+- PostgreSQL
+- JWT Authentication
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📂 Database Models
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- User
+- Task
+- Attendance
+- Notice
+- Note
+- Timetable
 
-## Deploy on Vercel
+## 🚀 Highlights
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Modern responsive UI
+- Secure authentication
+- Role-based dashboard
+- Personal data management
+- Scalable database architecture
+- Production-ready project structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+**Developed as a Full Stack Internship Project to demonstrate secure authentication, role-based access control (RBAC), and modern web application development using the Next.js ecosystem.**
