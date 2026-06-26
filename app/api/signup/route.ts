@@ -15,7 +15,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // role validation (IMPORTANT FIX)
     if (role !== "STUDENT" && role !== "ADMIN") {
       return NextResponse.json(
         { message: "Invalid role selected" },
@@ -24,7 +23,9 @@ export async function POST(req: Request) {
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: {
+        email,
+      },
     });
 
     if (existingUser) {
@@ -34,14 +35,14 @@ export async function POST(req: Request) {
       );
     }
 
-    const hashed = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
       data: {
         fullName,
         email,
-        password: hashed,
-        role, // ✅ FIXED
+        password: hashedPassword,
+        role,
       },
     });
 
@@ -54,10 +55,21 @@ export async function POST(req: Request) {
         role: user.role,
       },
     });
+
   } catch (error) {
+
+    console.error("Signup Error:", error);
+
     return NextResponse.json(
-      { message: "Something went wrong" },
-      { status: 500 }
+      {
+        message:
+          error instanceof Error
+            ? error.message
+            : "Unknown Error",
+      },
+      {
+        status: 500,
+      }
     );
   }
 }

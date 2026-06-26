@@ -1,10 +1,42 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+
+import { prisma } from "@/lib/prisma";
+import { verifyToken } from "@/lib/auth";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return NextResponse.json({
-    ok: true,
-  });
+  try {
+    const cookieStore = await cookies();
+
+    const token = cookieStore.get("token")?.value;
+
+    if (!token) {
+      return NextResponse.json([], { status: 401 });
+    }
+
+    const payload = verifyToken(token);
+
+    if (!payload) {
+      return NextResponse.json([], { status: 401 });
+    }
+
+    const attendance = await prisma.attendance.findMany({
+      where: {
+        userId: payload.userId,
+      },
+      select: {
+        subject: true,
+        percentage: true,
+      },
+    });
+
+    return NextResponse.json(attendance);
+  } catch (error) {
+    console.log(error);
+
+    return NextResponse.json([]);
+  }
 }
