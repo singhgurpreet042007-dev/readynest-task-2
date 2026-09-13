@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PlusCircle, FileText, Link2 } from "lucide-react";
 
 export default function NoteForm() {
+  const [role, setRole] = useState<string>("");
+
   const [form, setForm] = useState({
     title: "",
     fileUrl: "",
   });
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole || "STUDENT");
+  }, []);
 
   const handle = (key: string, value: string) => {
     setForm((p) => ({ ...p, [key]: value }));
@@ -26,6 +33,9 @@ export default function NoteForm() {
       window.location.reload();
     }
   }
+
+  // Students cannot upload notes
+  if (role !== "ADMIN") return null;
 
   return (
     <div className="mb-4 rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-[#10172a] to-[#0a0f1f] p-4 shadow-xl shadow-cyan-500/10">

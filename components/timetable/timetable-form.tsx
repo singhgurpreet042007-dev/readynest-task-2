@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CalendarDays,
   BookOpen,
@@ -9,12 +9,19 @@ import {
 } from "lucide-react";
 
 export default function TimetableForm() {
+  const [role, setRole] = useState<string>("");
+
   const [form, setForm] = useState({
     subject: "",
     day: "",
     startTime: "",
     endTime: "",
   });
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole || "STUDENT");
+  }, []);
 
   const handle = (key: string, value: string) => {
     setForm((p) => ({ ...p, [key]: value }));
@@ -32,6 +39,9 @@ export default function TimetableForm() {
       window.location.reload();
     }
   }
+
+  // Students cannot add timetable entries
+  if (role !== "ADMIN") return null;
 
   return (
     <div className="mb-4 rounded-2xl border border-cyan-500/20 bg-[#0F172A] p-4 shadow-lg">

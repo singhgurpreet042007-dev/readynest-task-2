@@ -1,13 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BellPlus, FileText } from "lucide-react";
 
 export default function NoticeForm() {
+  const [role, setRole] = useState<string>("");
+
   const [form, setForm] = useState({
     title: "",
     description: "",
   });
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole || "STUDENT");
+  }, []);
 
   const handle = (key: string, value: string) => {
     setForm((p) => ({ ...p, [key]: value }));
@@ -26,6 +33,9 @@ export default function NoticeForm() {
       window.location.reload();
     }
   }
+
+  // Students cannot create notices
+  if (role !== "ADMIN") return null;
 
   return (
     <div className="mb-4 rounded-2xl border border-violet-500/20 bg-[#0F172A] p-4 shadow-lg">

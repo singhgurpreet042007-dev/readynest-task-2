@@ -11,9 +11,12 @@ type Note = {
 
 export default function NoteList() {
   const [notes, setNotes] = useState<Note[]>([]);
+  const [role, setRole] = useState<string>("");
 
   useEffect(() => {
     fetchNotes();
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole || "STUDENT");
   }, []);
 
   async function fetchNotes() {
@@ -74,13 +77,15 @@ export default function NoteList() {
               Open
             </a>
 
-            <button
-              onClick={() => deleteNote(note.id)}
-              className="flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
-            >
-              <Trash2 size={12} />
-              Delete
-            </button>
+            {role === "ADMIN" && (
+              <button
+                onClick={() => deleteNote(note.id)}
+                className="flex items-center gap-1 rounded-lg bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
+              >
+                <Trash2 size={12} />
+                Delete
+              </button>
+            )}
 
           </div>
 

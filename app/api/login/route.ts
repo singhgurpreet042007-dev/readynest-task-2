@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
@@ -7,7 +6,6 @@ import { generateToken } from "@/lib/auth";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-
     const { email, password } = body;
 
     if (!email || !password) {
@@ -18,9 +16,7 @@ export async function POST(req: Request) {
     }
 
     const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
     });
 
     if (!user) {
@@ -30,10 +26,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return NextResponse.json(
@@ -42,7 +35,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const token = generateToken(user.id);
+    const token = generateToken(user.id, user.role);
 
     const response = NextResponse.json({
       success: true,
@@ -50,35 +43,21 @@ export async function POST(req: Request) {
         id: user.id,
         fullName: user.fullName,
         email: user.email,
-        role: user.role,
+        role: user.role, // ✅ IMPORTANT
       },
     });
 
     response.cookies.set("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
       path: "/",
       maxAge: 60 * 60 * 24 * 7,
     });
 
     return response;
-
   } catch (error) {
-
-    console.error("Login Error:", error);
-
     return NextResponse.json(
-      {
-        message:
-          error instanceof Error
-            ? error.message
-            : "Unknown Error",
-      },
-      {
-        status: 500,
-      }
+      { message: "Server error" },
+      { status: 500 }
     );
   }
 }
-

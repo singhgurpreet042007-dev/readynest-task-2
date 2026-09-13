@@ -11,9 +11,12 @@ type Notice = {
 
 export default function NoticeList() {
   const [notices, setNotices] = useState<Notice[]>([]);
+  const [role, setRole] = useState<string>("");
 
   useEffect(() => {
     fetchNotices();
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole || "STUDENT");
   }, []);
 
   async function fetchNotices() {
@@ -37,7 +40,9 @@ export default function NoticeList() {
             No Notices Found
           </h3>
           <p className="mt-1 text-xs text-slate-400">
-            Create your first notice to get started.
+            {role === "ADMIN"
+              ? "Create your first notice to get started."
+              : "No notices have been published yet."}
           </p>
         </div>
       )}
@@ -78,19 +83,21 @@ export default function NoticeList() {
 
             </div>
 
-            <button
-              onClick={() => deleteNotice(notice.id)}
-              className="
-                rounded-lg
-                bg-red-500/15
-                p-2.5
-                text-red-400
-                hover:bg-red-500
-                hover:text-white
-              "
-            >
-              <Trash2 size={16} />
-            </button>
+            {role === "ADMIN" && (
+              <button
+                onClick={() => deleteNotice(notice.id)}
+                className="
+                  rounded-lg
+                  bg-red-500/15
+                  p-2.5
+                  text-red-400
+                  hover:bg-red-500
+                  hover:text-white
+                "
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
 
           </div>
 

@@ -18,9 +18,12 @@ type Timetable = {
 
 export default function TimetableList() {
   const [data, setData] = useState<Timetable[]>([]);
+  const [role, setRole] = useState<string>("");
 
   useEffect(() => {
     fetchData();
+    const storedRole = localStorage.getItem("role");
+    setRole(storedRole || "STUDENT");
   }, []);
 
   async function fetchData() {
@@ -111,13 +114,15 @@ export default function TimetableList() {
 
             </div>
 
-            <button
-              onClick={() => deleteItem(item.id)}
-              className="flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm text-white transition hover:bg-red-700"
-            >
-              <Trash2 size={15} />
-              Delete
-            </button>
+            {role === "ADMIN" && (
+              <button
+                onClick={() => deleteItem(item.id)}
+                className="flex items-center gap-2 rounded-lg bg-red-600 px-3 py-2 text-sm text-white transition hover:bg-red-700"
+              >
+                <Trash2 size={15} />
+                Delete
+              </button>
+            )}
 
           </div>
 

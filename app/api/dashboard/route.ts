@@ -55,7 +55,7 @@ const attendance =
   attendanceData.length > 0
     ? Math.round(
         attendanceData.reduce(
-          (sum, item) =>
+          (sum: number, item) =>
             sum + item.percentage,
           0
         ) / attendanceData.length
