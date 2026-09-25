@@ -119,13 +119,13 @@ Database seeding me ye accounts pehle se configured hain:
 
 ### 1. Administrator Account
 - **Email**: `admin@campus.edu`
-- **Password**: `Admin@1234`
+- **Password**: `admin123`
 - **Role**: `ADMIN`
 - **Access**: Full Access (Campus Command Center, Student Directory, Broadcast Notice Engine, Timetable Scheduler)
 
 ### 2. Student Account
-- **Email**: `rahul.sharma@campus.edu`
-- **Password**: `Student@1234`
+- **Email**: `student@campus.edu`
+- **Password**: `student123`
 - **Role**: `STUDENT`
 - **Access**: Student Dashboard, 75% Attendance Predictor, Daily Timetable, Sprint Tasks
 

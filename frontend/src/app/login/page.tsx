@@ -234,6 +234,37 @@ export default function LoginPage() {
             </div>
           )}
 
+          {/* Quick Demo Credentials Autofill */}
+          <div className="p-3 rounded-2xl bg-neutral-50 border border-neutral-200/80 text-xs">
+            <p className="text-[11px] font-medium text-neutral-500 mb-2">⚡ Quick 1-Click Demo Fill:</p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail('admin@campus.edu');
+                  setPassword('admin123');
+                  setError('');
+                }}
+                className="py-1.5 px-2.5 rounded-xl border border-neutral-300 bg-white hover:border-orange-500 hover:bg-orange-50/50 text-[11px] font-medium text-neutral-800 flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+              >
+                <ShieldCheck className="w-3.5 h-3.5 text-orange-500" />
+                Fill Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail('student@campus.edu');
+                  setPassword('student123');
+                  setError('');
+                }}
+                className="py-1.5 px-2.5 rounded-xl border border-neutral-300 bg-white hover:border-blue-500 hover:bg-blue-50/50 text-[11px] font-medium text-neutral-800 flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
+              >
+                <GraduationCap className="w-3.5 h-3.5 text-blue-500" />
+                Fill Student
+              </button>
+            </div>
+          </div>
+
           <form onSubmit={handleLogin} className="space-y-4">
             <Input
               label="Campus Email"
