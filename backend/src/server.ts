@@ -108,13 +108,21 @@ app.use(errorHandler);
 
 // Start Server
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
+  app.listen(Number(PORT), '0.0.0.0', async () => {
     console.log(`=========================================`);
     console.log(`🚀 Smart Campus Utility Backend Server`);
-    console.log(`📡 URL: http://localhost:${PORT}`);
-    console.log(`🔒 Health Check: http://localhost:${PORT}/api/health`);
+    console.log(`📡 URL: http://0.0.0.0:${PORT}`);
+    console.log(`🔒 Health Check: http://0.0.0.0:${PORT}/api/health`);
     console.log(`💼 CORS Allowed Origin: ${CLIENT_URL}`);
     console.log(`=========================================`);
+
+    // Ensure database demo accounts are seeded once listening
+    try {
+      const { seedDatabase } = await import('./utils/seedDatabase');
+      await seedDatabase();
+    } catch (err: any) {
+      console.warn('[server] Startup seeding notice:', err.message);
+    }
   });
 }
 
