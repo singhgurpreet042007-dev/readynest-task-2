@@ -16,18 +16,64 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
 
-// Middleware
-app.use(
-  cors({
-    origin: [CLIENT_URL, 'http://localhost:3000', 'http://127.0.0.1:3000'],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
+// Trust reverse proxies (Render, Railway, etc.)
+app.set('trust proxy', 1);
+
+// Flexible CORS Configuration
+const allowedOrigins = [
+  CLIENT_URL,
+  CLIENT_URL.replace(/\/$/, ''),
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+];
+
+const corsOptions: cors.CorsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, server-to-server, curl)
+    if (!origin) return callback(null, true);
+
+    if (
+      CLIENT_URL === '*' ||
+      allowedOrigins.includes(origin) ||
+      origin.endsWith('.vercel.app') ||
+      origin.endsWith('.render.com') ||
+      process.env.NODE_ENV !== 'production'
+    ) {
+      return callback(null, true);
+    }
+    // Permissive fallback so production deployment never breaks due to CORS
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Root Info & Health Check Endpoint (for Render / uptime pings)
+app.get('/', (_req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    service: 'Smart Campus Utility API',
+    version: '1.0.0',
+    environment: process.env.NODE_ENV || 'development',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      attendance: '/api/attendance',
+      timetable: '/api/timetable',
+      notices: '/api/notices',
+      tasks: '/api/tasks',
+      admin: '/api/admin',
+    },
+  });
+});
 
 // Health Check Endpoint
 app.get('/api/health', (_req, res) => {

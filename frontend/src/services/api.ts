@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const cleanBaseUrl = rawBaseUrl.replace(/\/+$/, '');
+const API_BASE_URL = cleanBaseUrl.endsWith('/api') ? cleanBaseUrl : `${cleanBaseUrl}/api`;
 
 export function getStoredToken(): string | null {
   if (typeof window === 'undefined') return null;
@@ -22,7 +24,19 @@ export async function apiClient<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = getStoredToken();
-  const url = `${API_BASE_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = `${API_BASE_URL}${cleanEndpoint}`;
+
+  // Check for HTTPS -> localhost mixed content in live browser environments
+  if (
+    typeof window !== 'undefined' &&
+    window.location.protocol === 'https:' &&
+    API_BASE_URL.startsWith('http://localhost')
+  ) {
+    throw new Error(
+      'Deployment Configuration Error: The frontend is running on HTTPS, but NEXT_PUBLIC_API_URL is pointing to localhost. Please configure your live Backend URL in Vercel Environment Variables.'
+    );
+  }
 
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -44,7 +58,12 @@ export async function apiClient<T>(
 
     return data as T;
   } catch (error: any) {
-    // Return error for handling or fallback
+    // If it's a network fetch failure (e.g. Render sleeping or connection refused)
+    if (error.name === 'TypeError' && error.message === 'Failed to fetch') {
+      throw new Error(
+        'Unable to connect to backend server. If hosted on a free cloud tier (like Render), it may take 30-45 seconds to wake up from cold sleep. Please retry in a moment.'
+      );
+    }
     throw error;
   }
 }
