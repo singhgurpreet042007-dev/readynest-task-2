@@ -23,6 +23,11 @@ if (!databaseUrl) {
   }
 }
 
+if (!databaseUrl) {
+  databaseUrl = 'file:./dev.db';
+}
+process.env.DATABASE_URL = databaseUrl;
+
 let targetProvider = 'sqlite';
 if (databaseUrl.startsWith('postgresql://') || databaseUrl.startsWith('postgres://')) {
   targetProvider = 'postgresql';

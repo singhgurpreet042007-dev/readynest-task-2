@@ -19,6 +19,11 @@ export function removeStoredToken(): void {
   localStorage.removeItem('role');
 }
 
+export function isUsingLocalFallback(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.location.protocol === 'https:' && API_BASE_URL.startsWith('http://localhost');
+}
+
 export async function apiClient<T>(
   endpoint: string,
   options: RequestInit = {}
@@ -28,14 +33,8 @@ export async function apiClient<T>(
   const url = `${API_BASE_URL}${cleanEndpoint}`;
 
   // Check for HTTPS -> localhost mixed content in live browser environments
-  if (
-    typeof window !== 'undefined' &&
-    window.location.protocol === 'https:' &&
-    API_BASE_URL.startsWith('http://localhost')
-  ) {
-    throw new Error(
-      'Deployment Configuration Error: The frontend is running on HTTPS, but NEXT_PUBLIC_API_URL is pointing to localhost. Please configure your live Backend URL in Vercel Environment Variables.'
-    );
+  if (isUsingLocalFallback()) {
+    throw new Error('BACKEND_NOT_CONFIGURED');
   }
 
   const headers: HeadersInit = {

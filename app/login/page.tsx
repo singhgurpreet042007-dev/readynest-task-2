@@ -9,30 +9,40 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleLogin() {
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message || "Login Failed");
-      return;
+      if (!res.ok) {
+        setError(data.message || "Login Failed");
+        return;
+      }
+
+      localStorage.setItem("role", data.user.role);
+
+      if (data.user.role === "ADMIN") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/dashboard");
+      }
+
+      router.refresh();
+    } catch {
+      setError("Unable to connect to server. Please try again.");
+    } finally {
+      setLoading(false);
     }
-
-    localStorage.setItem("role", data.user.role);
-
-    if (data.user.role === "ADMIN") {
-      router.push("/admin/dashboard");
-    } else {
-      router.push("/dashboard");
-    }
-
-    router.refresh();
   }
 
   return (
@@ -94,7 +104,42 @@ export default function LoginPage() {
             Login to continue your dashboard
           </p>
 
-          <div className="mt-8 space-y-4">
+          {error && (
+            <div className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-300">
+              ⚠️ {error}
+            </div>
+          )}
+
+          {/* Quick Demo Autofill */}
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-3 text-xs">
+            <p className="font-semibold text-slate-300 mb-2">⚡ 1-Click Demo Login:</p>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("admin@campus.edu");
+                  setPassword("admin123");
+                  setError("");
+                }}
+                className="rounded-xl border border-white/15 bg-white/10 py-1.5 px-2 text-center font-medium text-white hover:bg-white/20 transition cursor-pointer"
+              >
+                👑 Admin Demo
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEmail("student@campus.edu");
+                  setPassword("student123");
+                  setError("");
+                }}
+                className="rounded-xl border border-white/15 bg-white/10 py-1.5 px-2 text-center font-medium text-white hover:bg-white/20 transition cursor-pointer"
+              >
+                🎓 Student Demo
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-6 space-y-4">
 
             <input
               placeholder="Email"
@@ -113,9 +158,10 @@ export default function LoginPage() {
 
             <button
               onClick={handleLogin}
-              className="w-full rounded-2xl bg-gradient-to-r from-red-600 via-red-500 to-orange-500 py-3 font-semibold transition hover:scale-[1.03]"
+              disabled={loading}
+              className="w-full rounded-2xl bg-gradient-to-r from-red-600 via-red-500 to-orange-500 py-3 font-semibold transition hover:scale-[1.03] disabled:opacity-50 cursor-pointer"
             >
-              LOGIN TO DASHBOARD
+              {loading ? "AUTHENTICATING..." : "LOGIN TO DASHBOARD"}
             </button>
 
           </div>
